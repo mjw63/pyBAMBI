@@ -22,10 +22,8 @@ def test_KerasNet():
     p = KerasNetInterpolation(params, logL)
 
     # Train the net and report back the interpolated value for this parameter set
-    print "Checks of neural net interpolation"
+    print("Checks of neural net interpolation")
     pred = p(params[0])
-    print logL[0], pred
+    print(logL[0], pred)
     pred = p(params[1])
-    print logL[1], pred
-    
-    assert False
+    print(logL[1], pred)
