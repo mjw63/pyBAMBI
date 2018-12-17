@@ -66,14 +66,6 @@ class KerasNetInterpolation(Predictor):
         
                 
     def __call__(self, x):
-
-        # Get prediction for input, assuming that it is a single parameter set
-        # Note: need to reshape the numpy array to match the model.predict expectation
-        # Need some other gymnastics because the test passes in a list
-        # None of this need make it to the final code
-        n_cols = self._params.shape[1]
-        x_test = numpy.array(x).reshape(1,n_cols)
-        
-        net_logL=self._model.predict(x_test)
-        
-        return net_logL
+        x_ = numpy.atleast_2d(x)
+        y = self._model.predict(x_)
+        return numpy.squeeze(y)
