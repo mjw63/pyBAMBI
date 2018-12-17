@@ -18,7 +18,7 @@ class KerasNetInterpolation(Predictor):
 
     """
 
-    def __init__(self, params, logL):
+    def __init__(self, params, logL, split=0.8):
         super(KerasNetInterpolation, self).__init__(params, logL)
         self._params = params[:]
         self._logL = logL[:]
@@ -30,16 +30,15 @@ class KerasNetInterpolation(Predictor):
         numNeurons = 200
         
         # Shuffle the params and logL in unison (important for splitting data into training and test sets)
-        randomize = numpy.arange(len(self._params))
-        numpy.random.shuffle(randomize)
+        ntot = len(self._params)
+        randomize = numpy.random.permutation(ntot)
         params = self._params[randomize]
         logL = self._logL[randomize]
 
         # Now split into training and test sets
-        # Use 80-20 split, could make this configurable?
-        npoints = int(numpy.rint(0.8*numpy.shape(params)[0]))
-        params_training, params_test = params[:npoints,:], params[npoints:,:]
-        logL_training, logL_test = logL[:npoints], logL[npoints:]
+        ntrain = int(split*ntot)
+        params_training, params_test = numpy.split(params,[ntrain])
+        logL_training, logL_test = numpy.split(logL,[ntrain]) 
 
         # Create model
         model = Sequential()
