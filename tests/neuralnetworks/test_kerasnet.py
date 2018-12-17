@@ -4,6 +4,7 @@ import scipy.stats
 from pybambi.neuralnetworks.kerasnet import KerasNetInterpolation
 
 def test_KerasNet():
+    numpy.random.seed(0)
     # Generate data from a 2D Gaussian
     # Pick some random numbers from a multivariate Gaussian (gives reasonable sampling density in the interesting regions)
     mu = numpy.array([0,0])
