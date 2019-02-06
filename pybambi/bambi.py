@@ -3,8 +3,7 @@
 import os
 from pybambi.dumper import dumper
 
-
-def run_pyBAMBI(loglikelihood, prior, nDims, **kwargs):
+def run_pyBAMBI(input_loglikelihood, prior, nDims, **kwargs):
     """ run pyBAMBI
 
     Parameters
@@ -30,6 +29,14 @@ def run_pyBAMBI(loglikelihood, prior, nDims, **kwargs):
         Default `0.5**nDims`
     """
 
+    # Intercept likelihood function
+    def loglikelihood(theta):
+        # Call likelihood from BAMBI object
+        localBAMBI = bambi()
+        logL = Thumper.get_loglikelihood(input_loglikelihood,theta)
+        loglikelihood.called = True
+        return logL
+            
     # Process kwargs
     nested_sampler = kwargs.pop('nested_sampler', 'polychord')
     nlive = kwargs.pop('nlive', nDims*25)
